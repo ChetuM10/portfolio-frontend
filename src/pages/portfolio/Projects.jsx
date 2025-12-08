@@ -1,122 +1,180 @@
-"use client"
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
+import api from "../../lib/api";
+import { ExternalLink, Github, Filter } from "lucide-react";
 
-import { useState, useEffect } from "react"
-import { Link } from "react-router-dom"
-import api from "../../lib/api"
-import { ExternalLink, Github } from "lucide-react"
+const categories = [
+  { value: "all", label: "All Projects" },
+  { value: "web", label: "Web Apps" },
+  { value: "mobile", label: "Mobile" },
+  { value: "backend", label: "Backend" },
+  { value: "fullstack", label: "Full Stack" },
+];
 
 export default function Projects() {
-  const [projects, setProjects] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [filter, setFilter] = useState("all")
-  const [categories, setCategories] = useState([])
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [activeFilter, setActiveFilter] = useState("all");
 
   useEffect(() => {
-    fetchProjects()
-  }, [])
+    fetchProjects();
+  }, []);
 
   const fetchProjects = async () => {
     try {
-      const res = await api.get("/projects")
-      const data = res.data.data
-      setProjects(data)
-
-      // Get unique categories
-      const uniqueCategories = [...new Set(data.map((p) => p.category))]
-      setCategories(uniqueCategories)
+      const res = await api.get("/projects");
+      setProjects(res.data.data);
     } catch (error) {
-      console.error("Error fetching projects:", error)
+      console.error("Error fetching projects:", error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
-  const filteredProjects = filter === "all" ? projects : projects.filter((p) => p.category === filter)
+  const filteredProjects =
+    activeFilter === "all"
+      ? projects
+      : projects.filter((p) => p.category === activeFilter);
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-900">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
       </div>
-    )
+    );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <section className="py-20 bg-white">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl font-bold text-gray-900">My Projects</h1>
-          <p className="text-gray-600 mt-4 text-lg max-w-2xl mx-auto">
-            A collection of projects I've worked on, from web applications to mobile apps and more.
+    <div className="min-h-screen bg-white dark:bg-gray-900 py-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center mb-12"
+        >
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900 dark:text-white">
+            My Projects
+          </h1>
+          <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+            A collection of projects showcasing my expertise in full-stack
+            development, from web applications to scalable backend systems
           </p>
-        </div>
-      </section>
+        </motion.div>
 
-      {/* Filter */}
-      {categories.length > 1 && (
-        <section className="py-8 bg-white border-b">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex flex-wrap justify-center gap-2">
-              <button
-                onClick={() => setFilter("all")}
-                className={`px-4 py-2 rounded-lg transition-colors ${
-                  filter === "all" ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                }`}
-              >
-                All
-              </button>
-              {categories.map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => setFilter(cat)}
-                  className={`px-4 py-2 rounded-lg capitalize transition-colors ${
-                    filter === cat ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                  }`}
-                >
-                  {cat}
-                </button>
-              ))}
+        {/* Filter Buttons */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="flex flex-wrap justify-center gap-3 mb-12"
+        >
+          {categories.map((category) => (
+            <button
+              key={category.value}
+              onClick={() => setActiveFilter(category.value)}
+              className={`px-6 py-2.5 rounded-lg font-medium transition-all ${
+                activeFilter === category.value
+                  ? "bg-blue-600 text-white shadow-lg shadow-blue-600/30"
+                  : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
+              }`}
+            >
+              {category.label}
+            </button>
+          ))}
+        </motion.div>
+
+        {/* Projects Grid */}
+        {filteredProjects.length === 0 ? (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-center py-20"
+          >
+            <div className="text-gray-400 dark:text-gray-600 mb-4">
+              <Filter size={64} className="mx-auto mb-4" />
+              <p className="text-xl">No projects found in this category</p>
+              <p className="text-sm mt-2">Try selecting a different filter</p>
             </div>
-          </div>
-        </section>
-      )}
-
-      {/* Projects Grid */}
-      <section className="py-16">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredProjects.map((project) => (
-              <div
+          </motion.div>
+        ) : (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredProjects.map((project, index) => (
+              <motion.div
                 key={project._id}
-                className="group bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-lg transition-shadow"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: index * 0.05 }}
+                className="group"
               >
-                {project.thumbnail && (
-                  <Link to={`/projects/${project.slug}`} className="block aspect-video overflow-hidden">
-                    <img
-                      src={project.thumbnail || "/placeholder.svg"}
-                      alt={project.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                  </Link>
-                )}
-                <div className="p-6">
-                  <div className="flex items-start justify-between">
-                    <Link to={`/projects/${project.slug}`}>
-                      <h3 className="font-semibold text-gray-900 text-lg group-hover:text-blue-600 transition-colors">
-                        {project.title}
-                      </h3>
-                    </Link>
-                    <div className="flex items-center gap-2">
+                <div className="bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 h-full flex flex-col">
+                  {/* Project Image with Overlay */}
+                  <div className="relative h-56 overflow-hidden bg-gradient-to-br from-blue-500 to-purple-600">
+                    {project.thumbnail ? (
+                      <img
+                        src={project.thumbnail}
+                        alt={project.title}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center">
+                        <span className="text-white text-6xl font-bold opacity-20">
+                          {project.title.charAt(0)}
+                        </span>
+                      </div>
+                    )}
+
+                    {/* Hover Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                      <p className="text-white text-sm line-clamp-2">
+                        {project.shortDescription || project.description}
+                      </p>
+                    </div>
+
+                    {/* Featured Badge */}
+                    {project.featured && (
+                      <div className="absolute top-4 right-4 bg-yellow-400 text-yellow-900 px-3 py-1 rounded-full text-xs font-bold">
+                        Featured
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Content */}
+                  <div className="p-6 flex-1 flex flex-col">
+                    <h3 className="text-xl font-bold mb-3 text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                      {project.title}
+                    </h3>
+
+                    {/* Tech Stack Badges */}
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {project.technologies?.slice(0, 3).map((tech, i) => (
+                        <span
+                          key={i}
+                          className="px-2.5 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-md text-xs font-medium"
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                      {project.technologies?.length > 3 && (
+                        <span className="px-2.5 py-1 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 rounded-md text-xs font-medium">
+                          +{project.technologies.length - 3} more
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div className="mt-auto flex gap-3">
                       {project.liveUrl && (
                         <a
                           href={project.liveUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="p-2 text-gray-400 hover:text-blue-600"
-                          title="Live Demo"
+                          className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium text-sm"
+                          onClick={(e) => e.stopPropagation()}
                         >
-                          <ExternalLink size={18} />
+                          <ExternalLink size={16} />
+                          Live Demo
                         </a>
                       )}
                       {project.githubUrl && (
@@ -124,39 +182,27 @@ export default function Projects() {
                           href={project.githubUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="p-2 text-gray-400 hover:text-gray-900"
-                          title="GitHub"
+                          className="flex items-center justify-center gap-2 px-4 py-2.5 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors font-medium text-sm"
+                          onClick={(e) => e.stopPropagation()}
                         >
-                          <Github size={18} />
+                          <Github size={16} />
+                          Code
                         </a>
                       )}
+                      <Link
+                        to={`/projects/${project.slug}`}
+                        className="flex items-center justify-center px-4 py-2.5 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors font-medium text-sm"
+                      >
+                        Details
+                      </Link>
                     </div>
                   </div>
-                  <p className="text-gray-600 mt-2 line-clamp-2">{project.shortDescription || project.description}</p>
-                  <div className="flex flex-wrap gap-2 mt-4">
-                    {project.technologies?.slice(0, 4).map((tech, i) => (
-                      <span key={i} className="text-xs px-2 py-1 bg-gray-100 text-gray-600 rounded">
-                        {tech}
-                      </span>
-                    ))}
-                    {project.technologies?.length > 4 && (
-                      <span className="text-xs px-2 py-1 bg-gray-100 text-gray-600 rounded">
-                        +{project.technologies.length - 4}
-                      </span>
-                    )}
-                  </div>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
-
-          {filteredProjects.length === 0 && (
-            <div className="text-center py-20">
-              <p className="text-gray-500">No projects found</p>
-            </div>
-          )}
-        </div>
-      </section>
+        )}
+      </div>
     </div>
-  )
+  );
 }
