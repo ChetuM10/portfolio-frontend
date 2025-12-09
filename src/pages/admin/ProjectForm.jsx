@@ -90,19 +90,28 @@ export default function ProjectForm() {
   }
 
   return (
-    <div>
-      <div className="mb-8">
+    <div className="space-y-6">
+      {/* Header with Gradient */}
+      <div>
         <button
           onClick={() => navigate("/admin/projects")}
-          className="flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-4"
+          className="flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-4 transition-colors"
         >
           <ArrowLeft size={20} /> Back to Projects
         </button>
-        <h1 className="text-3xl font-bold text-gray-900">{id ? "Edit Project" : "New Project"}</h1>
+        <h1 className="text-4xl md:text-5xl font-bold mb-2">
+          <span className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
+            {id ? "Edit Project" : "New Project"}
+          </span>
+        </h1>
+        <p className="text-gray-600">
+          {id ? "Update your project details" : "Create a new portfolio project"}
+        </p>
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
-        <div className="bg-white rounded-xl shadow-sm p-6">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        {/* Basic Information */}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">Basic Information</h2>
 
           <div className="space-y-6">
@@ -110,7 +119,7 @@ export default function ProjectForm() {
               <label className="block text-sm font-medium text-gray-700 mb-2">Title</label>
               <input
                 {...register("title", { required: true })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
                 placeholder="Project Title"
               />
             </div>
@@ -119,7 +128,7 @@ export default function ProjectForm() {
               <label className="block text-sm font-medium text-gray-700 mb-2">Short Description</label>
               <input
                 {...register("shortDescription")}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
                 placeholder="Brief description for cards"
               />
             </div>
@@ -129,7 +138,7 @@ export default function ProjectForm() {
               <textarea
                 {...register("description", { required: true })}
                 rows={6}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all resize-none"
                 placeholder="Detailed project description..."
               />
             </div>
@@ -139,7 +148,7 @@ export default function ProjectForm() {
                 <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
                 <select
                   {...register("category")}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
                 >
                   <option value="web">Web Application</option>
                   <option value="mobile">Mobile App</option>
@@ -160,7 +169,7 @@ export default function ProjectForm() {
                 <label className="block text-sm font-medium text-gray-700 mb-2">Live URL</label>
                 <input
                   {...register("liveUrl")}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
                   placeholder="https://..."
                 />
               </div>
@@ -168,7 +177,7 @@ export default function ProjectForm() {
                 <label className="block text-sm font-medium text-gray-700 mb-2">GitHub URL</label>
                 <input
                   {...register("githubUrl")}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
                   placeholder="https://github.com/..."
                 />
               </div>
@@ -177,17 +186,17 @@ export default function ProjectForm() {
         </div>
 
         {/* Technologies */}
-        <div className="bg-white rounded-xl shadow-sm p-6">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">Technologies</h2>
 
           <div className="flex flex-wrap gap-2 mb-4">
             {technologies.map((tech, index) => (
               <span
                 key={index}
-                className="inline-flex items-center gap-1 px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm"
+                className="inline-flex items-center gap-1 px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium"
               >
                 {tech}
-                <button type="button" onClick={() => removeTechnology(index)} className="hover:text-blue-900">
+                <button type="button" onClick={() => removeTechnology(index)} className="hover:text-blue-900 transition-colors">
                   <X size={14} />
                 </button>
               </span>
@@ -198,7 +207,7 @@ export default function ProjectForm() {
             <input
               type="text"
               id="techInput"
-              className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+              className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
               placeholder="Add technology (e.g., React)"
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
@@ -215,7 +224,7 @@ export default function ProjectForm() {
                 addTechnology(input.value.trim())
                 input.value = ""
               }}
-              className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+              className="px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
             >
               <Plus size={20} />
             </button>
@@ -223,36 +232,44 @@ export default function ProjectForm() {
         </div>
 
         {/* Settings */}
-        <div className="bg-white rounded-xl shadow-sm p-6">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">Settings</h2>
 
           <div className="space-y-4">
-            <label className="flex items-center gap-3">
-              <input type="checkbox" {...register("featured")} className="rounded border-gray-300" />
+            <label className="flex items-center gap-3 cursor-pointer">
+              <input type="checkbox" {...register("featured")} className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500" />
               <span className="text-sm text-gray-700">Featured project (shown on homepage)</span>
             </label>
 
-            <label className="flex items-center gap-3">
-              <input type="checkbox" {...register("isVisible")} className="rounded border-gray-300" />
+            <label className="flex items-center gap-3 cursor-pointer">
+              <input type="checkbox" {...register("isVisible")} className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500" />
               <span className="text-sm text-gray-700">Visible on portfolio</span>
             </label>
           </div>
         </div>
 
+        {/* Action Buttons */}
         <div className="flex gap-4">
           <button
             type="button"
             onClick={() => navigate("/admin/projects")}
-            className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+            className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={saving}
-            className="px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50"
+            className="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-blue-500/30"
           >
-            {saving ? "Saving..." : id ? "Update Project" : "Create Project"}
+            {saving ? (
+              <span className="flex items-center gap-2">
+                <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></div>
+                Saving...
+              </span>
+            ) : (
+              id ? "Update Project" : "Create Project"
+            )}
           </button>
         </div>
       </form>
