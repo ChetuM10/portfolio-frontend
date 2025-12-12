@@ -45,68 +45,100 @@ export default function BlogsPage() {
   }
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-8">
+    <div className="space-y-6">
+      {/* Header with Gradient */}
+      <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Blog Posts</h1>
-          <p className="text-gray-600 mt-1">Manage your blog content</p>
+          <h1 className="text-4xl md:text-5xl font-bold mb-2">
+            <span className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
+              Blog Posts
+            </span>
+          </h1>
+          <p className="text-gray-600">Manage your blog content</p>
         </div>
         <Link
           to="/admin/blogs/new"
-          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-md"
         >
           <Plus size={20} /> New Post
         </Link>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {blogs.map((blog) => (
-          <div key={blog._id} className="bg-white rounded-xl shadow-sm overflow-hidden">
-            {blog.thumbnail && (
-              <img src={blog.thumbnail || "/placeholder.svg"} alt={blog.title} className="w-full h-48 object-cover" />
-            )}
-            <div className="p-6">
-              <div className="flex items-center gap-2 mb-2">
-                <span
-                  className={`text-xs px-2 py-1 rounded-full ${
-                    blog.isPublished ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"
-                  }`}
-                >
-                  {blog.isPublished ? "Published" : "Draft"}
-                </span>
-                <span className="text-xs text-gray-500 capitalize">{blog.category}</span>
-              </div>
-              <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2">{blog.title}</h3>
-              <p className="text-sm text-gray-600 line-clamp-2 mb-4">{blog.excerpt}</p>
-              <div className="flex items-center justify-between text-sm text-gray-500">
-                <div className="flex items-center gap-4">
-                  <span className="flex items-center gap-1">
-                    <Clock size={14} /> {blog.readTime} min
+      {/* Blog Grid */}
+      {blogs.length === 0 ? (
+        <div className="text-center py-16 bg-white rounded-xl border border-gray-200 shadow-sm">
+          <div className="max-w-sm mx-auto">
+            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Plus size={32} className="text-gray-400" />
+            </div>
+            <p className="text-gray-500 mb-4">No blog posts yet</p>
+            <Link 
+              to="/admin/blogs/new" 
+              className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              <Plus size={16} /> Create your first post
+            </Link>
+          </div>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {blogs.map((blog) => (
+            <div key={blog._id} className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+              {blog.thumbnail && (
+                <div className="relative h-48 overflow-hidden">
+                  <img 
+                    src={blog.thumbnail || "/placeholder.svg"} 
+                    alt={blog.title} 
+                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-300" 
+                  />
+                </div>
+              )}
+              <div className="p-6">
+                <div className="flex items-center gap-2 mb-3">
+                  <span
+                    className={`text-xs font-semibold px-2.5 py-1 rounded-full ${
+                      blog.isPublished ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"
+                    }`}
+                  >
+                    {blog.isPublished ? "Published" : "Draft"}
                   </span>
-                  <span className="flex items-center gap-1">
-                    <Eye size={14} /> {blog.views}
+                  <span className="text-xs font-medium text-gray-500 capitalize px-2.5 py-1 bg-gray-100 rounded-full">
+                    {blog.category}
                   </span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Link to={`/admin/blogs/edit/${blog._id}`} className="p-2 text-gray-400 hover:text-blue-600">
-                    <Edit2 size={18} />
-                  </Link>
-                  <button onClick={() => handleDelete(blog._id)} className="p-2 text-gray-400 hover:text-red-600">
-                    <Trash2 size={18} />
-                  </button>
+                <h3 className="font-bold text-gray-900 mb-2 line-clamp-2 text-lg">
+                  {blog.title}
+                </h3>
+                <p className="text-sm text-gray-600 line-clamp-2 mb-4">
+                  {blog.excerpt}
+                </p>
+                <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                  <div className="flex items-center gap-4 text-sm text-gray-500">
+                    <span className="flex items-center gap-1">
+                      <Clock size={14} /> {blog.readTime} min
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <Eye size={14} /> {blog.views || 0}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Link 
+                      to={`/admin/blogs/edit/${blog._id}`} 
+                      className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                    >
+                      <Edit2 size={18} />
+                    </Link>
+                    <button 
+                      onClick={() => handleDelete(blog._id)} 
+                      className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                    >
+                      <Trash2 size={18} />
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
-
-      {blogs.length === 0 && (
-        <div className="text-center py-12 bg-white rounded-xl">
-          <p className="text-gray-500">No blog posts yet</p>
-          <Link to="/admin/blogs/new" className="inline-flex items-center gap-2 mt-4 text-blue-600 hover:underline">
-            <Plus size={16} /> Create your first post
-          </Link>
+          ))}
         </div>
       )}
     </div>

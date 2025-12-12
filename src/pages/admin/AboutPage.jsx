@@ -95,7 +95,7 @@ export default function AboutPage() {
               <label className="block text-sm font-medium text-gray-700 mb-2">Title</label>
               <input
                 {...register("title")}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-gray-900 bg-white"
                 placeholder="About Me"
               />
             </div>
@@ -103,7 +103,7 @@ export default function AboutPage() {
               <label className="block text-sm font-medium text-gray-700 mb-2">Subtitle</label>
               <input
                 {...register("subtitle")}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-gray-900 bg-white"
                 placeholder="Full Stack Developer"
               />
             </div>
@@ -114,7 +114,7 @@ export default function AboutPage() {
             <textarea
               {...register("description")}
               rows={6}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all resize-none"
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all resize-none text-gray-900 bg-white"
               placeholder="Write about yourself..."
             />
           </div>
@@ -128,7 +128,7 @@ export default function AboutPage() {
               <label className="block text-sm font-medium text-gray-700 mb-2">Resume URL</label>
               <input
                 {...register("resume")}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-gray-900 bg-white"
                 placeholder="https://..."
               />
             </div>
@@ -154,13 +154,13 @@ export default function AboutPage() {
                 <input
                   value={stat.label}
                   onChange={(e) => updateStat(index, "label", e.target.value)}
-                  className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                  className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-gray-900 bg-white"
                   placeholder="Label (e.g., Years Experience)"
                 />
                 <input
                   value={stat.value}
                   onChange={(e) => updateStat(index, "value", e.target.value)}
-                  className="w-32 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                  className="w-32 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-gray-900 bg-white"
                   placeholder="Value"
                 />
                 <button
@@ -184,7 +184,7 @@ export default function AboutPage() {
               <label className="block text-sm font-medium text-gray-700 mb-2">GitHub</label>
               <input
                 {...register("socialLinks.github")}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-gray-900 bg-white"
                 placeholder="https://github.com/username"
               />
             </div>
@@ -192,7 +192,7 @@ export default function AboutPage() {
               <label className="block text-sm font-medium text-gray-700 mb-2">LinkedIn</label>
               <input
                 {...register("socialLinks.linkedin")}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-gray-900 bg-white"
                 placeholder="https://linkedin.com/in/username"
               />
             </div>
@@ -200,7 +200,7 @@ export default function AboutPage() {
               <label className="block text-sm font-medium text-gray-700 mb-2">Twitter</label>
               <input
                 {...register("socialLinks.twitter")}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-gray-900 bg-white"
                 placeholder="https://twitter.com/username"
               />
             </div>
@@ -208,7 +208,7 @@ export default function AboutPage() {
               <label className="block text-sm font-medium text-gray-700 mb-2">Instagram</label>
               <input
                 {...register("socialLinks.instagram")}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-gray-900 bg-white"
                 placeholder="https://instagram.com/username"
               />
             </div>
@@ -216,7 +216,7 @@ export default function AboutPage() {
               <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
               <input
                 {...register("socialLinks.email")}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-gray-900 bg-white"
                 placeholder="your@email.com"
               />
             </div>

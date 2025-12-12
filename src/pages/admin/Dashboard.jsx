@@ -43,10 +43,38 @@ export default function Dashboard() {
   };
 
   const statCards = [
-    { label: "Projects", value: stats.projects, icon: FolderOpen, color: "blue", link: "/admin/projects" },
-    { label: "Blog Posts", value: stats.blogs, icon: FileText, color: "green", link: "/admin/blogs" },
-    { label: "Messages", value: stats.messages, icon: MessageSquare, color: "purple", link: "/admin/messages" },
-    { label: "Skills", value: stats.skills, icon: TrendingUp, color: "orange", link: "/admin/skills" },
+    { 
+      label: "Projects", 
+      value: stats.projects, 
+      icon: FolderOpen, 
+      bgColor: "bg-blue-50", 
+      iconColor: "text-blue-600",
+      link: "/admin/projects" 
+    },
+    { 
+      label: "Blog Posts", 
+      value: stats.blogs, 
+      icon: FileText, 
+      bgColor: "bg-green-50", 
+      iconColor: "text-green-600",
+      link: "/admin/blogs" 
+    },
+    { 
+      label: "Messages", 
+      value: stats.messages, 
+      icon: MessageSquare, 
+      bgColor: "bg-purple-50", 
+      iconColor: "text-purple-600",
+      link: "/admin/messages" 
+    },
+    { 
+      label: "Skills", 
+      value: stats.skills, 
+      icon: TrendingUp, 
+      bgColor: "bg-orange-50", 
+      iconColor: "text-orange-600",
+      link: "/admin/skills" 
+    },
   ];
 
   if (loading) {
@@ -75,14 +103,14 @@ export default function Dashboard() {
           const Icon = stat.icon;
           return (
             <Link key={stat.label} to={stat.link}>
-              <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+              <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-1">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-gray-600 font-medium">{stat.label}</p>
                     <p className="text-3xl font-bold text-gray-900 mt-2">{stat.value}</p>
                   </div>
-                  <div className={`p-3 rounded-lg bg-${stat.color}-50`}>
-                    <Icon className={`w-6 h-6 text-${stat.color}-600`} />
+                  <div className={`p-3 rounded-lg ${stat.bgColor}`}>
+                    <Icon className={`w-6 h-6 ${stat.iconColor}`} />
                   </div>
                 </div>
               </div>
@@ -102,7 +130,7 @@ export default function Dashboard() {
           ) : (
             <div className="space-y-4">
               {recentMessages.map((message) => (
-                <div key={message._id} className="flex items-start gap-4 p-4 bg-gray-50 rounded-lg">
+                <div key={message._id} className="flex items-start gap-4 p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
                       <h3 className="font-semibold text-gray-900">{message.name}</h3>

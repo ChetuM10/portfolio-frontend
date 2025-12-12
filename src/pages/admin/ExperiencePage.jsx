@@ -117,46 +117,64 @@ export default function ExperiencePage() {
   }
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-8">
+    <div className="space-y-6">
+      {/* Header with Gradient */}
+      <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Experience</h1>
-          <p className="text-gray-600 mt-1">Manage your work and education history</p>
+          <h1 className="text-4xl md:text-5xl font-bold mb-2">
+            <span className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
+              Experience
+            </span>
+          </h1>
+          <p className="text-gray-600">Manage your work and education history</p>
         </div>
         <button
           onClick={() => openModal()}
-          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-md"
         >
           <Plus size={20} /> Add Experience
         </button>
       </div>
 
+      {/* Experience List */}
       <div className="space-y-4">
         {experiences.map((exp) => {
           const TypeIcon = types.find((t) => t.value === exp.type)?.icon || Briefcase
           return (
-            <div key={exp._id} className="bg-white rounded-xl shadow-sm p-6">
+            <div key={exp._id} className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
               <div className="flex items-start justify-between">
-                <div className="flex items-start gap-4">
-                  <div className="p-3 bg-blue-100 rounded-lg">
+                <div className="flex items-start gap-4 flex-1">
+                  <div className="p-3 bg-blue-100 rounded-lg flex-shrink-0">
                     <TypeIcon className="text-blue-600" size={24} />
                   </div>
-                  <div>
-                    <h3 className="font-semibold text-gray-900">{exp.title}</h3>
-                    <p className="text-gray-600">{exp.company}</p>
-                    {exp.location && <p className="text-sm text-gray-500">{exp.location}</p>}
+                  <div className="flex-1">
+                    <h3 className="font-bold text-gray-900 text-lg">{exp.title}</h3>
+                    <p className="text-gray-600 font-medium">{exp.company}</p>
+                    {exp.location && <p className="text-sm text-gray-500 mt-1">{exp.location}</p>}
                     <p className="text-sm text-gray-500 mt-1">
                       {exp.startDate && format(new Date(exp.startDate), "MMM yyyy")} -{" "}
-                      {exp.isCurrent ? "Present" : exp.endDate && format(new Date(exp.endDate), "MMM yyyy")}
+                      {exp.isCurrent ? (
+                        <span className="text-green-600 font-medium">Present</span>
+                      ) : (
+                        exp.endDate && format(new Date(exp.endDate), "MMM yyyy")
+                      )}
                     </p>
-                    {exp.description && <p className="text-sm text-gray-600 mt-2">{exp.description}</p>}
+                    {exp.description && (
+                      <p className="text-sm text-gray-600 mt-3 leading-relaxed">{exp.description}</p>
+                    )}
                   </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <button onClick={() => openModal(exp)} className="p-2 text-gray-400 hover:text-blue-600">
+                <div className="flex items-center gap-2 flex-shrink-0 ml-4">
+                  <button 
+                    onClick={() => openModal(exp)} 
+                    className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                  >
                     <Edit2 size={18} />
                   </button>
-                  <button onClick={() => handleDelete(exp._id)} className="p-2 text-gray-400 hover:text-red-600">
+                  <button 
+                    onClick={() => handleDelete(exp._id)} 
+                    className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                  >
                     <Trash2 size={18} />
                   </button>
                 </div>
@@ -166,8 +184,19 @@ export default function ExperiencePage() {
         })}
 
         {experiences.length === 0 && (
-          <div className="text-center py-12 bg-white rounded-xl">
-            <p className="text-gray-500">No experiences added yet</p>
+          <div className="text-center py-16 bg-white rounded-xl border border-gray-200 shadow-sm">
+            <div className="max-w-sm mx-auto">
+              <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Briefcase size={32} className="text-gray-400" />
+              </div>
+              <p className="text-gray-500 mb-4">No experiences added yet</p>
+              <button
+                onClick={() => openModal()}
+                className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                <Plus size={16} /> Add Your First Experience
+              </button>
+            </div>
           </div>
         )}
       </div>
@@ -175,23 +204,23 @@ export default function ExperiencePage() {
       {/* Modal */}
       {modalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
-          <div className="bg-white rounded-xl shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto p-6">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-semibold text-gray-900">
+          <div className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
+              <h2 className="text-xl font-bold text-gray-900">
                 {editingExp ? "Edit Experience" : "Add Experience"}
               </h2>
-              <button onClick={closeModal} className="text-gray-400 hover:text-gray-600">
+              <button onClick={closeModal} className="text-gray-400 hover:text-gray-600 transition-colors">
                 <X size={24} />
               </button>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="p-6 space-y-5">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Title</label>
                 <input
                   value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
                   placeholder="Software Engineer"
                   required
                 />
@@ -202,7 +231,7 @@ export default function ExperiencePage() {
                 <input
                   value={formData.company}
                   onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
                   placeholder="Company Name"
                   required
                 />
@@ -214,7 +243,7 @@ export default function ExperiencePage() {
                   <select
                     value={formData.type}
                     onChange={(e) => setFormData({ ...formData, type: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
                   >
                     {types.map((type) => (
                       <option key={type.value} value={type.value}>
@@ -228,7 +257,7 @@ export default function ExperiencePage() {
                   <input
                     value={formData.location}
                     onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
                     placeholder="City, Country"
                   />
                 </div>
@@ -241,7 +270,7 @@ export default function ExperiencePage() {
                     type="date"
                     value={formData.startDate}
                     onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
                     required
                   />
                 </div>
@@ -251,18 +280,18 @@ export default function ExperiencePage() {
                     type="date"
                     value={formData.endDate}
                     onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all disabled:bg-gray-100 disabled:cursor-not-allowed"
                     disabled={formData.isCurrent}
                   />
                 </div>
               </div>
 
-              <label className="flex items-center gap-2">
+              <label className="flex items-center gap-3 cursor-pointer">
                 <input
                   type="checkbox"
                   checked={formData.isCurrent}
                   onChange={(e) => setFormData({ ...formData, isCurrent: e.target.checked })}
-                  className="rounded border-gray-300"
+                  className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                 />
                 <span className="text-sm text-gray-700">I currently work here</span>
               </label>
@@ -272,23 +301,23 @@ export default function ExperiencePage() {
                 <textarea
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  rows={3}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
-                  placeholder="Brief description of your role..."
+                  rows={4}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all resize-none"
+                  placeholder="Brief description of your role and achievements..."
                 />
               </div>
 
-              <div className="flex gap-4 pt-4">
+              <div className="flex gap-4 pt-4 border-t border-gray-200">
                 <button
                   type="button"
                   onClick={closeModal}
-                  className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                  className="flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                  className="flex-1 px-4 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all shadow-lg shadow-blue-500/30"
                 >
                   {editingExp ? "Update" : "Create"}
                 </button>

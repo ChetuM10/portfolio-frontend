@@ -136,7 +136,7 @@ export default function SettingsPage() {
                   <input
                     type="text"
                     {...registerProfile("name", { required: true })}
-                    className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                    className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-gray-900 bg-white"
                     placeholder="Your name"
                   />
                 </div>
@@ -154,7 +154,7 @@ export default function SettingsPage() {
                   <input
                     type="email"
                     {...registerProfile("email", { required: true })}
-                    className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                    className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-gray-900 bg-white"
                     placeholder="your.email@example.com"
                   />
                 </div>
@@ -210,7 +210,7 @@ export default function SettingsPage() {
                   <input
                     type={showCurrentPassword ? "text" : "password"}
                     {...registerPassword("currentPassword", { required: true })}
-                    className="w-full pl-11 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-all"
+                    className="w-full pl-11 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-all text-gray-900 bg-white"
                     placeholder="Enter current password"
                   />
                   <button
@@ -242,7 +242,7 @@ export default function SettingsPage() {
                       required: true,
                       minLength: 6,
                     })}
-                    className="w-full pl-11 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-all"
+                    className="w-full pl-11 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-all text-gray-900 bg-white"
                     placeholder="Enter new password"
                   />
                   <button
@@ -270,7 +270,7 @@ export default function SettingsPage() {
                   <input
                     type={showConfirmPassword ? "text" : "password"}
                     {...registerPassword("confirmPassword", { required: true })}
-                    className="w-full pl-11 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-all"
+                    className="w-full pl-11 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition-all text-gray-900 bg-white"
                     placeholder="Confirm new password"
                   />
                   <button

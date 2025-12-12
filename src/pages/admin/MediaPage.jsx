@@ -88,11 +88,16 @@ export default function MediaPage() {
   }
 
   return (
-    <div>
-      <div className="flex items-center justify-between mb-8">
+    <div className="space-y-6">
+      {/* Header with Gradient */}
+      <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Media Library</h1>
-          <p className="text-gray-600 mt-1">Manage your uploaded images</p>
+          <h1 className="text-4xl md:text-5xl font-bold mb-2">
+            <span className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
+              Media Library
+            </span>
+          </h1>
+          <p className="text-gray-600">Manage your uploaded images</p>
         </div>
         <div>
           <input
@@ -106,54 +111,86 @@ export default function MediaPage() {
           />
           <label
             htmlFor="fileUpload"
-            className={`flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors cursor-pointer ${
+            className={`flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors cursor-pointer shadow-md ${
               uploading ? "opacity-50 cursor-not-allowed" : ""
             }`}
           >
-            <Upload size={20} />
-            {uploading ? "Uploading..." : "Upload Images"}
+            {uploading ? (
+              <>
+                <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></div>
+                Uploading...
+              </>
+            ) : (
+              <>
+                <Upload size={20} />
+                Upload Images
+              </>
+            )}
           </label>
         </div>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-        {media.map((item) => (
-          <div key={item._id} className="group relative bg-white rounded-lg shadow-sm overflow-hidden">
-            <div className="aspect-square">
-              <img src={item.url || "/placeholder.svg"} alt={item.filename} className="w-full h-full object-cover" />
-            </div>
-            <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100">
-              <button
-                onClick={() => copyUrl(item.url)}
-                className="p-2 bg-white rounded-full text-gray-700 hover:text-blue-600"
-                title="Copy URL"
-              >
-                <Copy size={18} />
-              </button>
-              <button
-                onClick={() => handleDelete(item._id)}
-                className="p-2 bg-white rounded-full text-gray-700 hover:text-red-600"
-                title="Delete"
-              >
-                <Trash2 size={18} />
-              </button>
-            </div>
-            <div className="p-2">
-              <p className="text-xs text-gray-500 truncate">{item.filename}</p>
-            </div>
+      {/* Media Grid */}
+      {media.length === 0 ? (
+        <div className="flex flex-col items-center justify-center py-20 bg-white rounded-xl border border-gray-200 shadow-sm">
+          <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+            <ImageIcon size={40} className="text-gray-400" />
           </div>
-        ))}
+          <p className="text-gray-500 mb-4">No images uploaded yet</p>
+          <label 
+            htmlFor="fileUpload" 
+            className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors cursor-pointer"
+          >
+            <Upload size={16} />
+            Upload your first image
+          </label>
+        </div>
+      ) : (
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+          {media.map((item) => (
+            <div 
+              key={item._id} 
+              className="group relative bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow"
+            >
+              <div className="aspect-square overflow-hidden">
+                <img 
+                  src={item.url || "/placeholder.svg"} 
+                  alt={item.filename} 
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" 
+                />
+              </div>
+              <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-60 transition-all flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100">
+                <button
+                  onClick={() => copyUrl(item.url)}
+                  className="p-2.5 bg-white rounded-full text-gray-700 hover:text-blue-600 hover:scale-110 transition-all shadow-lg"
+                  title="Copy URL"
+                >
+                  <Copy size={18} />
+                </button>
+                <button
+                  onClick={() => handleDelete(item._id)}
+                  className="p-2.5 bg-white rounded-full text-gray-700 hover:text-red-600 hover:scale-110 transition-all shadow-lg"
+                  title="Delete"
+                >
+                  <Trash2 size={18} />
+                </button>
+              </div>
+              <div className="p-3 bg-white">
+                <p className="text-xs text-gray-500 truncate font-medium">{item.filename}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
 
-        {media.length === 0 && (
-          <div className="col-span-full flex flex-col items-center justify-center py-16 bg-white rounded-xl">
-            <ImageIcon size={48} className="text-gray-300 mb-4" />
-            <p className="text-gray-500">No images uploaded yet</p>
-            <label htmlFor="fileUpload" className="mt-4 text-blue-600 hover:underline cursor-pointer">
-              Upload your first image
-            </label>
-          </div>
-        )}
-      </div>
+      {/* Image Count */}
+      {media.length > 0 && (
+        <div className="text-center">
+          <p className="text-sm text-gray-500">
+            Total: <span className="font-semibold text-gray-700">{media.length}</span> {media.length === 1 ? 'image' : 'images'}
+          </p>
+        </div>
+      )}
     </div>
   )
 }

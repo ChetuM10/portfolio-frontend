@@ -1,20 +1,20 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { useNavigate, useParams } from "react-router-dom"
-import { useForm } from "react-hook-form"
-import api from "../../lib/api"
-import toast from "react-hot-toast"
-import ImageUpload from "../../components/admin/ImageUpload"
-import { X, Plus, ArrowLeft } from "lucide-react"
+import { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import api from "../../lib/api";
+import toast from "react-hot-toast";
+import ImageUpload from "../../components/admin/ImageUpload";
+import { X, Plus, ArrowLeft } from "lucide-react";
 
 export default function ProjectForm() {
-  const { id } = useParams()
-  const navigate = useNavigate()
-  const [loading, setLoading] = useState(!!id)
-  const [saving, setSaving] = useState(false)
-  const [technologies, setTechnologies] = useState([])
-  const [images, setImages] = useState([])
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(!!id);
+  const [saving, setSaving] = useState(false);
+  const [technologies, setTechnologies] = useState([]);
+  const [images, setImages] = useState([]);
   const { register, handleSubmit, setValue, watch } = useForm({
     defaultValues: {
       title: "",
@@ -27,66 +27,66 @@ export default function ProjectForm() {
       isVisible: true,
       thumbnail: "",
     },
-  })
+  });
 
   useEffect(() => {
-    if (id) fetchProject()
-  }, [id])
+    if (id) fetchProject();
+  }, [id]);
 
   const fetchProject = async () => {
     try {
-      const res = await api.get(`/projects/id/${id}`)
-      const data = res.data.data
+      const res = await api.get(`/projects/id/${id}`);
+      const data = res.data.data;
       Object.keys(data).forEach((key) => {
         if (key !== "technologies" && key !== "images") {
-          setValue(key, data[key])
+          setValue(key, data[key]);
         }
-      })
-      setTechnologies(data.technologies || [])
-      setImages(data.images || [])
+      });
+      setTechnologies(data.technologies || []);
+      setImages(data.images || []);
     } catch (error) {
-      toast.error("Failed to fetch project")
-      navigate("/admin/projects")
+      toast.error("Failed to fetch project");
+      navigate("/admin/projects");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const onSubmit = async (data) => {
-    setSaving(true)
+    setSaving(true);
     try {
-      const payload = { ...data, technologies, images }
+      const payload = { ...data, technologies, images };
       if (id) {
-        await api.put(`/projects/${id}`, payload)
-        toast.success("Project updated!")
+        await api.put(`/projects/${id}`, payload);
+        toast.success("Project updated!");
       } else {
-        await api.post("/projects", payload)
-        toast.success("Project created!")
+        await api.post("/projects", payload);
+        toast.success("Project created!");
       }
-      navigate("/admin/projects")
+      navigate("/admin/projects");
     } catch (error) {
-      toast.error("Failed to save project")
+      toast.error("Failed to save project");
     } finally {
-      setSaving(false)
+      setSaving(false);
     }
-  }
+  };
 
   const addTechnology = (tech) => {
     if (tech && !technologies.includes(tech)) {
-      setTechnologies([...technologies, tech])
+      setTechnologies([...technologies, tech]);
     }
-  }
+  };
 
   const removeTechnology = (index) => {
-    setTechnologies(technologies.filter((_, i) => i !== index))
-  }
+    setTechnologies(technologies.filter((_, i) => i !== index));
+  };
 
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
       </div>
-    )
+    );
   }
 
   return (
@@ -105,50 +105,62 @@ export default function ProjectForm() {
           </span>
         </h1>
         <p className="text-gray-600">
-          {id ? "Update your project details" : "Create a new portfolio project"}
+          {id
+            ? "Update your project details"
+            : "Create a new portfolio project"}
         </p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {/* Basic Information */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Basic Information</h2>
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">
+            Basic Information
+          </h2>
 
           <div className="space-y-6">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Title</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Title
+              </label>
               <input
                 {...register("title", { required: true })}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-gray-900 bg-white"
                 placeholder="Project Title"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Short Description</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Short Description
+              </label>
               <input
                 {...register("shortDescription")}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-gray-900 bg-white"
                 placeholder="Brief description for cards"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Full Description</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Full Description
+              </label>
               <textarea
                 {...register("description", { required: true })}
                 rows={6}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all resize-none"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all resize-none text-gray-900 bg-white"
                 placeholder="Detailed project description..."
               />
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Category
+                </label>
                 <select
                   {...register("category")}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-gray-900 bg-white"
                 >
                   <option value="web">Web Application</option>
                   <option value="mobile">Mobile App</option>
@@ -159,25 +171,34 @@ export default function ProjectForm() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Thumbnail</label>
-                <ImageUpload value={watch("thumbnail")} onChange={(url) => setValue("thumbnail", url)} />
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Thumbnail
+                </label>
+                <ImageUpload
+                  value={watch("thumbnail")}
+                  onChange={(url) => setValue("thumbnail", url)}
+                />
               </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Live URL</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Live URL
+                </label>
                 <input
                   {...register("liveUrl")}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-gray-900 bg-white"
                   placeholder="https://..."
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">GitHub URL</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  GitHub URL
+                </label>
                 <input
                   {...register("githubUrl")}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-gray-900 bg-white"
                   placeholder="https://github.com/..."
                 />
               </div>
@@ -187,7 +208,9 @@ export default function ProjectForm() {
 
         {/* Technologies */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Technologies</h2>
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">
+            Technologies
+          </h2>
 
           <div className="flex flex-wrap gap-2 mb-4">
             {technologies.map((tech, index) => (
@@ -196,7 +219,11 @@ export default function ProjectForm() {
                 className="inline-flex items-center gap-1 px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium"
               >
                 {tech}
-                <button type="button" onClick={() => removeTechnology(index)} className="hover:text-blue-900 transition-colors">
+                <button
+                  type="button"
+                  onClick={() => removeTechnology(index)}
+                  className="hover:text-blue-900 transition-colors"
+                >
                   <X size={14} />
                 </button>
               </span>
@@ -207,22 +234,22 @@ export default function ProjectForm() {
             <input
               type="text"
               id="techInput"
-              className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+              className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-gray-900 bg-white"
               placeholder="Add technology (e.g., React)"
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
-                  e.preventDefault()
-                  addTechnology(e.target.value.trim())
-                  e.target.value = ""
+                  e.preventDefault();
+                  addTechnology(e.target.value.trim());
+                  e.target.value = "";
                 }
               }}
             />
             <button
               type="button"
               onClick={() => {
-                const input = document.getElementById("techInput")
-                addTechnology(input.value.trim())
-                input.value = ""
+                const input = document.getElementById("techInput");
+                addTechnology(input.value.trim());
+                input.value = "";
               }}
               className="px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
             >
@@ -237,13 +264,25 @@ export default function ProjectForm() {
 
           <div className="space-y-4">
             <label className="flex items-center gap-3 cursor-pointer">
-              <input type="checkbox" {...register("featured")} className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500" />
-              <span className="text-sm text-gray-700">Featured project (shown on homepage)</span>
+              <input
+                type="checkbox"
+                {...register("featured")}
+                className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+              />
+              <span className="text-sm text-gray-700">
+                Featured project (shown on homepage)
+              </span>
             </label>
 
             <label className="flex items-center gap-3 cursor-pointer">
-              <input type="checkbox" {...register("isVisible")} className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500" />
-              <span className="text-sm text-gray-700">Visible on portfolio</span>
+              <input
+                type="checkbox"
+                {...register("isVisible")}
+                className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+              />
+              <span className="text-sm text-gray-700">
+                Visible on portfolio
+              </span>
             </label>
           </div>
         </div>
@@ -267,12 +306,14 @@ export default function ProjectForm() {
                 <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></div>
                 Saving...
               </span>
+            ) : id ? (
+              "Update Project"
             ) : (
-              id ? "Update Project" : "Create Project"
+              "Create Project"
             )}
           </button>
         </div>
       </form>
     </div>
-  )
+  );
 }

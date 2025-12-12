@@ -83,19 +83,28 @@ export default function BlogForm() {
   }
 
   return (
-    <div>
-      <div className="mb-8">
+    <div className="space-y-6">
+      {/* Header with Gradient */}
+      <div>
         <button
           onClick={() => navigate("/admin/blogs")}
-          className="flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-4"
+          className="flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-4 transition-colors"
         >
           <ArrowLeft size={20} /> Back to Blogs
         </button>
-        <h1 className="text-3xl font-bold text-gray-900">{id ? "Edit Blog Post" : "New Blog Post"}</h1>
+        <h1 className="text-4xl md:text-5xl font-bold mb-2">
+          <span className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
+            {id ? "Edit Blog Post" : "New Blog Post"}
+          </span>
+        </h1>
+        <p className="text-gray-600">
+          {id ? "Update your blog post" : "Create a new blog post"}
+        </p>
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
-        <div className="bg-white rounded-xl shadow-sm p-6">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        {/* Post Details */}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">Post Details</h2>
 
           <div className="space-y-6">
@@ -103,7 +112,7 @@ export default function BlogForm() {
               <label className="block text-sm font-medium text-gray-700 mb-2">Title</label>
               <input
                 {...register("title", { required: true })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
                 placeholder="Blog post title"
               />
             </div>
@@ -113,7 +122,7 @@ export default function BlogForm() {
               <textarea
                 {...register("excerpt")}
                 rows={2}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all resize-none"
                 placeholder="Brief summary for preview cards"
               />
             </div>
@@ -123,7 +132,7 @@ export default function BlogForm() {
               <textarea
                 {...register("content", { required: true })}
                 rows={15}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none font-mono text-sm"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all font-mono text-sm resize-none"
                 placeholder="Write your blog content here... (Markdown supported)"
               />
             </div>
@@ -133,7 +142,7 @@ export default function BlogForm() {
                 <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
                 <select
                   {...register("category")}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
                 >
                   <option value="general">General</option>
                   <option value="technology">Technology</option>
@@ -151,17 +160,17 @@ export default function BlogForm() {
         </div>
 
         {/* Tags */}
-        <div className="bg-white rounded-xl shadow-sm p-6">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">Tags</h2>
 
           <div className="flex flex-wrap gap-2 mb-4">
             {tags.map((tag, index) => (
               <span
                 key={index}
-                className="inline-flex items-center gap-1 px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm"
+                className="inline-flex items-center gap-1 px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm font-medium"
               >
                 {tag}
-                <button type="button" onClick={() => removeTag(index)} className="hover:text-gray-900">
+                <button type="button" onClick={() => removeTag(index)} className="hover:text-blue-900 transition-colors">
                   <X size={14} />
                 </button>
               </span>
@@ -172,7 +181,7 @@ export default function BlogForm() {
             <input
               type="text"
               id="tagInput"
-              className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
+              className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
               placeholder="Add tag"
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
@@ -189,7 +198,7 @@ export default function BlogForm() {
                 addTag(input.value.trim())
                 input.value = ""
               }}
-              className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+              className="px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
             >
               <Plus size={20} />
             </button>
@@ -197,29 +206,37 @@ export default function BlogForm() {
         </div>
 
         {/* Publishing */}
-        <div className="bg-white rounded-xl shadow-sm p-6">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">Publishing</h2>
 
-          <label className="flex items-center gap-3">
-            <input type="checkbox" {...register("isPublished")} className="rounded border-gray-300" />
+          <label className="flex items-center gap-3 cursor-pointer">
+            <input type="checkbox" {...register("isPublished")} className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500" />
             <span className="text-sm text-gray-700">Publish this post (visible to visitors)</span>
           </label>
         </div>
 
+        {/* Action Buttons */}
         <div className="flex gap-4">
           <button
             type="button"
             onClick={() => navigate("/admin/blogs")}
-            className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+            className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={saving}
-            className="px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50"
+            className="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-blue-500/30"
           >
-            {saving ? "Saving..." : id ? "Update Post" : "Create Post"}
+            {saving ? (
+              <span className="flex items-center gap-2">
+                <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></div>
+                Saving...
+              </span>
+            ) : (
+              id ? "Update Post" : "Create Post"
+            )}
           </button>
         </div>
       </form>
