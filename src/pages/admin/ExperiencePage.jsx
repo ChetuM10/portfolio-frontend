@@ -1,22 +1,30 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { format } from "date-fns"
-import api from "../../lib/api"
-import toast from "react-hot-toast"
-import { Plus, Edit2, Trash2, X, Briefcase, GraduationCap, Award } from "lucide-react"
+import { useState, useEffect } from "react";
+import { format } from "date-fns";
+import api from "../../lib/api";
+import toast from "react-hot-toast";
+import {
+  Plus,
+  Edit2,
+  Trash2,
+  X,
+  Briefcase,
+  GraduationCap,
+  Award,
+} from "lucide-react";
 
 const types = [
   { value: "work", label: "Work", icon: Briefcase },
   { value: "education", label: "Education", icon: GraduationCap },
   { value: "certification", label: "Certification", icon: Award },
-]
+];
 
 export default function ExperiencePage() {
-  const [experiences, setExperiences] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [modalOpen, setModalOpen] = useState(false)
-  const [editingExp, setEditingExp] = useState(null)
+  const [experiences, setExperiences] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [editingExp, setEditingExp] = useState(null);
   const [formData, setFormData] = useState({
     title: "",
     company: "",
@@ -27,26 +35,26 @@ export default function ExperiencePage() {
     isCurrent: false,
     description: "",
     isVisible: true,
-  })
+  });
 
   useEffect(() => {
-    fetchExperiences()
-  }, [])
+    fetchExperiences();
+  }, []);
 
   const fetchExperiences = async () => {
     try {
-      const res = await api.get("/experience")
-      setExperiences(res.data.data)
+      const res = await api.get("/experience");
+      setExperiences(res.data.data);
     } catch (error) {
-      toast.error("Failed to fetch experiences")
+      toast.error("Failed to fetch experiences");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const openModal = (exp = null) => {
     if (exp) {
-      setEditingExp(exp)
+      setEditingExp(exp);
       setFormData({
         title: exp.title,
         company: exp.company,
@@ -57,9 +65,9 @@ export default function ExperiencePage() {
         isCurrent: exp.isCurrent,
         description: exp.description || "",
         isVisible: exp.isVisible,
-      })
+      });
     } else {
-      setEditingExp(null)
+      setEditingExp(null);
       setFormData({
         title: "",
         company: "",
@@ -70,51 +78,56 @@ export default function ExperiencePage() {
         isCurrent: false,
         description: "",
         isVisible: true,
-      })
+      });
     }
-    setModalOpen(true)
-  }
+    setModalOpen(true);
+  };
 
   const closeModal = () => {
-    setModalOpen(false)
-    setEditingExp(null)
-  }
+    setModalOpen(false);
+    setEditingExp(null);
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     try {
       if (editingExp) {
-        await api.put(`/experience/${editingExp._id}`, formData)
-        toast.success("Experience updated!")
+        await api.put(`/experience/${editingExp._id}`, formData);
+        toast.success("Experience updated!");
       } else {
-        await api.post("/experience", formData)
-        toast.success("Experience created!")
+        await api.post("/experience", formData);
+        toast.success("Experience created!");
       }
-      fetchExperiences()
-      closeModal()
+      fetchExperiences();
+      closeModal();
     } catch (error) {
-      toast.error("Failed to save experience")
+      toast.error("Failed to save experience");
     }
-  }
+  };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this experience?")) return
+    if (!window.confirm("Are you sure you want to delete this experience?"))
+      return;
     try {
-      await api.delete(`/experience/${id}`)
-      toast.success("Experience deleted!")
-      fetchExperiences()
+      await api.delete(`/experience/${id}`);
+      toast.success("Experience deleted!");
+      fetchExperiences();
     } catch (error) {
-      toast.error("Failed to delete experience")
+      toast.error("Failed to delete experience");
     }
-  }
+  };
 
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
       </div>
-    )
+    );
   }
+
+  // Added: force readable input/select/textarea styles (bg-white + text-gray-900)
+  const fieldClass =
+    "w-full bg-white text-gray-900 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all";
 
   return (
     <div className="space-y-6">
@@ -126,7 +139,9 @@ export default function ExperiencePage() {
               Experience
             </span>
           </h1>
-          <p className="text-gray-600">Manage your work and education history</p>
+          <p className="text-gray-600">
+            Manage your work and education history
+          </p>
         </div>
         <button
           onClick={() => openModal()}
@@ -139,40 +154,56 @@ export default function ExperiencePage() {
       {/* Experience List */}
       <div className="space-y-4">
         {experiences.map((exp) => {
-          const TypeIcon = types.find((t) => t.value === exp.type)?.icon || Briefcase
+          const TypeIcon =
+            types.find((t) => t.value === exp.type)?.icon || Briefcase;
           return (
-            <div key={exp._id} className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
+            <div
+              key={exp._id}
+              className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow"
+            >
               <div className="flex items-start justify-between">
                 <div className="flex items-start gap-4 flex-1">
                   <div className="p-3 bg-blue-100 rounded-lg flex-shrink-0">
                     <TypeIcon className="text-blue-600" size={24} />
                   </div>
                   <div className="flex-1">
-                    <h3 className="font-bold text-gray-900 text-lg">{exp.title}</h3>
+                    <h3 className="font-bold text-gray-900 text-lg">
+                      {exp.title}
+                    </h3>
                     <p className="text-gray-600 font-medium">{exp.company}</p>
-                    {exp.location && <p className="text-sm text-gray-500 mt-1">{exp.location}</p>}
+                    {exp.location && (
+                      <p className="text-sm text-gray-500 mt-1">
+                        {exp.location}
+                      </p>
+                    )}
                     <p className="text-sm text-gray-500 mt-1">
-                      {exp.startDate && format(new Date(exp.startDate), "MMM yyyy")} -{" "}
+                      {exp.startDate &&
+                        format(new Date(exp.startDate), "MMM yyyy")}{" "}
+                      -{" "}
                       {exp.isCurrent ? (
-                        <span className="text-green-600 font-medium">Present</span>
+                        <span className="text-green-600 font-medium">
+                          Present
+                        </span>
                       ) : (
                         exp.endDate && format(new Date(exp.endDate), "MMM yyyy")
                       )}
                     </p>
                     {exp.description && (
-                      <p className="text-sm text-gray-600 mt-3 leading-relaxed">{exp.description}</p>
+                      <p className="text-sm text-gray-600 mt-3 leading-relaxed">
+                        {exp.description}
+                      </p>
                     )}
                   </div>
                 </div>
                 <div className="flex items-center gap-2 flex-shrink-0 ml-4">
-                  <button 
-                    onClick={() => openModal(exp)} 
+                  <button
+                    onClick={() => openModal(exp)}
                     className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
                   >
                     <Edit2 size={18} />
                   </button>
-                  <button 
-                    onClick={() => handleDelete(exp._id)} 
+                  <button
+                    onClick={() => handleDelete(exp._id)}
                     className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                   >
                     <Trash2 size={18} />
@@ -180,7 +211,7 @@ export default function ExperiencePage() {
                 </div>
               </div>
             </div>
-          )
+          );
         })}
 
         {experiences.length === 0 && (
@@ -209,29 +240,40 @@ export default function ExperiencePage() {
               <h2 className="text-xl font-bold text-gray-900">
                 {editingExp ? "Edit Experience" : "Add Experience"}
               </h2>
-              <button onClick={closeModal} className="text-gray-400 hover:text-gray-600 transition-colors">
+              <button
+                onClick={closeModal}
+                className="text-gray-400 hover:text-gray-600 transition-colors"
+              >
                 <X size={24} />
               </button>
             </div>
 
             <form onSubmit={handleSubmit} className="p-6 space-y-5">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Title</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Title
+                </label>
                 <input
                   value={formData.title}
-                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                  onChange={(e) =>
+                    setFormData({ ...formData, title: e.target.value })
+                  }
+                  className={fieldClass}
                   placeholder="Software Engineer"
                   required
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Company/Institution</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Company/Institution
+                </label>
                 <input
                   value={formData.company}
-                  onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                  onChange={(e) =>
+                    setFormData({ ...formData, company: e.target.value })
+                  }
+                  className={fieldClass}
                   placeholder="Company Name"
                   required
                 />
@@ -239,11 +281,15 @@ export default function ExperiencePage() {
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Type</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Type
+                  </label>
                   <select
                     value={formData.type}
-                    onChange={(e) => setFormData({ ...formData, type: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                    onChange={(e) =>
+                      setFormData({ ...formData, type: e.target.value })
+                    }
+                    className={fieldClass}
                   >
                     {types.map((type) => (
                       <option key={type.value} value={type.value}>
@@ -253,11 +299,15 @@ export default function ExperiencePage() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Location</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Location
+                  </label>
                   <input
                     value={formData.location}
-                    onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                    onChange={(e) =>
+                      setFormData({ ...formData, location: e.target.value })
+                    }
+                    className={fieldClass}
                     placeholder="City, Country"
                   />
                 </div>
@@ -265,22 +315,30 @@ export default function ExperiencePage() {
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Start Date</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Start Date
+                  </label>
                   <input
                     type="date"
                     value={formData.startDate}
-                    onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all"
+                    onChange={(e) =>
+                      setFormData({ ...formData, startDate: e.target.value })
+                    }
+                    className={fieldClass}
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">End Date</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    End Date
+                  </label>
                   <input
                     type="date"
                     value={formData.endDate}
-                    onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all disabled:bg-gray-100 disabled:cursor-not-allowed"
+                    onChange={(e) =>
+                      setFormData({ ...formData, endDate: e.target.value })
+                    }
+                    className={`${fieldClass} disabled:bg-gray-100 disabled:cursor-not-allowed`}
                     disabled={formData.isCurrent}
                   />
                 </div>
@@ -290,19 +348,27 @@ export default function ExperiencePage() {
                 <input
                   type="checkbox"
                   checked={formData.isCurrent}
-                  onChange={(e) => setFormData({ ...formData, isCurrent: e.target.checked })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, isCurrent: e.target.checked })
+                  }
                   className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                 />
-                <span className="text-sm text-gray-700">I currently work here</span>
+                <span className="text-sm text-gray-700">
+                  I currently work here
+                </span>
               </label>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Description
+                </label>
                 <textarea
                   value={formData.description}
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, description: e.target.value })
+                  }
                   rows={4}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all resize-none"
+                  className={`${fieldClass} resize-none`}
                   placeholder="Brief description of your role and achievements..."
                 />
               </div>
@@ -327,5 +393,5 @@ export default function ExperiencePage() {
         </div>
       )}
     </div>
-  )
+  );
 }
