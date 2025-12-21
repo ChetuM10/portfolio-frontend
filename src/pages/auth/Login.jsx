@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import toast from "react-hot-toast";
@@ -13,11 +13,12 @@ export default function Login() {
   const { login, user } = useAuth();
   const navigate = useNavigate();
 
-  // Redirect if already logged in
-  if (user) {
-    navigate("/admin");
-    return null;
-  }
+  // Redirect if already logged in (only on mount or when user changes)
+  useEffect(() => {
+    if (user) {
+      navigate("/admin", { replace: true });
+    }
+  }, [user, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
